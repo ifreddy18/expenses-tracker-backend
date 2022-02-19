@@ -5,7 +5,7 @@ import cors from 'cors';
 import db from '../db/connections';
 
 // Routes
-import { usersRoutes } from '../routes';
+import { authRoutes, usersRoutes } from '../routes';
 
 class Server {
 
@@ -19,6 +19,7 @@ class Server {
         this.port = process.env.PORT || '8010';
 
         this.paths = {
+            auth: this.apiVersion,
             users: this.apiVersion + '/users',
         };
 
@@ -39,14 +40,12 @@ class Server {
             await db.authenticate();
             console.log('Database online');
 
-
-            // await db.sync();
-            await db.sync({ alter: true });
+            await db.sync();
+            // await db.sync({ alter: true });
 
         } catch (error: any) {
             throw new Error( error );
         }
-
 
     }
 
@@ -63,8 +62,8 @@ class Server {
     }
 
     routes(): void {
+        this.app.use( this.paths.auth , authRoutes );
         this.app.use( this.paths.users , usersRoutes );
-        // this.app.use( '/' , () => { console.log('resp')} );
     }
 
     listen(): void {

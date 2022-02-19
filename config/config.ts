@@ -9,6 +9,7 @@ const config = {
     db_password: process.env.DB_PASSWORD || '',
     db_host: process.env.DB_HOST || '',
     db_port: Number(process.env.DB_PORT) || 3306,
+    jwtSecretPrivateKey: process.env.SECRETORPRIVATEKEY || '',
 }
 
 export default config;

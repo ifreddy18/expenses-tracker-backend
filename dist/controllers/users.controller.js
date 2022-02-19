@@ -8,8 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.createUser = exports.getUserByUid = exports.getUsers = void 0;
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const models_1 = require("../db/models");
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -36,11 +51,14 @@ const getUserByUid = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.getUserByUid = getUserByUid;
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { body } = req;
+    const _a = req.body, { password } = _a, restUser = __rest(_a, ["password"]);
+    // Encrypt password
+    const salt = bcryptjs_1.default.genSaltSync();
+    const bcryptPassword = bcryptjs_1.default.hashSync(password, salt);
     try {
         // Create and save
-        const user = yield models_1.User.create(body);
-        res.json({ msg: 'User created successfully', user });
+        const user = yield models_1.User.create(Object.assign(Object.assign({}, restUser), { password: bcryptPassword }));
+        res.json({ msg: 'User created successfully', user: Object.assign({}, restUser) });
     }
     catch (error) {
         console.log({ error });

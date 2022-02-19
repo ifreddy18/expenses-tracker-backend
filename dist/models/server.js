@@ -24,6 +24,7 @@ class Server {
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8010';
         this.paths = {
+            auth: this.apiVersion,
             users: this.apiVersion + '/users',
         };
         // Conectar DB
@@ -39,8 +40,8 @@ class Server {
                 // Test connection
                 yield connections_1.default.authenticate();
                 console.log('Database online');
-                // await db.sync();
-                yield connections_1.default.sync({ alter: true });
+                yield connections_1.default.sync();
+                // await db.sync({ alter: true });
             }
             catch (error) {
                 throw new Error(error);
@@ -56,8 +57,8 @@ class Server {
         this.app.use(express_1.default.static('public'));
     }
     routes() {
+        this.app.use(this.paths.auth, routes_1.authRoutes);
         this.app.use(this.paths.users, routes_1.usersRoutes);
-        // this.app.use( '/' , () => { console.log('resp')} );
     }
     listen() {
         this.app.listen(this.port, () => {
