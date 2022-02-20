@@ -3,9 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.User = void 0;
 const sequelize_1 = require("sequelize");
 const connections_1 = __importDefault(require("../connections"));
-const User = connections_1.default.define('User', {
+exports.User = connections_1.default.define('User', {
     uid: {
         primaryKey: true,
         type: sequelize_1.DataTypes.UUID,
@@ -32,5 +33,4 @@ const User = connections_1.default.define('User', {
 }, {
     tableName: 'users'
 });
-exports.default = User;
 //# sourceMappingURL=user.js.map

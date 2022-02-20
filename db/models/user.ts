@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import db from '../connections';
 
-interface UserInstance extends Model {
+export interface UserInstance extends Model {
 	uid: string;
 	name: string;
 	email: string;
@@ -9,7 +9,7 @@ interface UserInstance extends Model {
 	status: number;
 }
 
-const User = db.define<UserInstance>('User', {
+export const User = db.define<UserInstance>('User', {
 	uid: {
 		primaryKey: true,
 		type: DataTypes.UUID,
@@ -36,5 +36,3 @@ const User = db.define<UserInstance>('User', {
 }, {
 	tableName: 'users'
 });
-
-export default User;

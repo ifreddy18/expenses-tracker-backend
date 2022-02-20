@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = void 0;
+exports.getAuthState = exports.login = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const models_1 = require("../db/models");
 const generate_jwt_1 = require("../helpers/generate-jwt");
@@ -45,8 +45,6 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // Generar el JWT
         const token = yield (0, generate_jwt_1.generateJWT)({
             uid: user.uid,
-            name: user.name,
-            email: user.email
         });
         res.status(200).json({ user, token });
     }
@@ -56,4 +54,9 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.login = login;
+const getAuthState = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { uid, email, name } = req.user;
+    res.status(200).json({ uid, email, name });
+});
+exports.getAuthState = getAuthState;
 //# sourceMappingURL=auth.controller.js.map

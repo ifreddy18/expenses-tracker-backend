@@ -1,5 +1,6 @@
-import User from './user';
+import { User, UserInstance } from './user';
+// import  from './user';
 
 export {
-    User
+    User, UserInstance
 }

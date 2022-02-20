@@ -39,8 +39,6 @@ export const login = async( req: Request, res: Response ): Promise<void> => {
 		// Generar el JWT
 		const token = await generateJWT({
             uid: user.uid,
-            name: user.name,
-            email: user.email
         });
 
 		res.status(200).json({ user, token });
@@ -49,4 +47,9 @@ export const login = async( req: Request, res: Response ): Promise<void> => {
 		console.log(error);
 		res.status(500).json({ msg: 'Talk to the admin' });
 	}
+};
+
+export const getAuthState = async(req: Request, res: Response): Promise<void> => {
+	const {uid, email, name } = req.user;
+	res.status(200).json({ uid, email, name });
 };
