@@ -1,6 +1,13 @@
 import { User, UserInstance } from './user';
-// import  from './user';
+import { Contact, ContactInstance } from './contact';
+
+// Associations
+// Users | Contacts
+User.hasMany(Contact, { foreignKey: 'uid' });
+Contact.belongsTo(User, { foreignKey: 'uid' });
+
 
 export {
-    User, UserInstance
-}
+    User, UserInstance,
+    Contact, ContactInstance,
+};

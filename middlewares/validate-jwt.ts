@@ -2,8 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
 import { User } from '../db/models';
-import { PayloadJWT } from '../interfaces/payloadJWT.interface';
-import { JwtPayload } from 'jsonwebtoken';
 
 const { jwtSecretPrivateKey } = config;
 

@@ -1,26 +1,25 @@
 import express, { Application } from 'express';
 import cors from 'cors';
-import { PayloadJWT } from '../interfaces';
-import { JwtPayload } from 'jsonwebtoken';
 import { UserInstance } from '../db/models';
-
-// Add properties to Request
-declare module 'express-serve-static-core' {
-    interface Request {
-    //   jwtPayload?: string | PayloadJWT
-        user: UserInstance
-    }
-    // tslint:disable-next-line: no-empty-interface
-    interface Response {}
-}
-
 
 // Database
 import db from '../db/connections';
 
 // Routes
-import { authRoutes, usersRoutes } from '../routes';
+import {
+    authRoutes,
+    contactsRoutes,
+    usersRoutes,
+} from '../routes';
 
+// Add properties to Request
+declare module 'express-serve-static-core' {
+    interface Request {
+        user: UserInstance
+    }
+    // tslint:disable-next-line: no-empty-interface
+    interface Response {}
+}
 
 
 class Server {
@@ -36,6 +35,7 @@ class Server {
 
         this.paths = {
             auth: this.apiVersion,
+            contacts: this.apiVersion + '/contacts',
             users: this.apiVersion + '/users',
         };
 
@@ -79,6 +79,7 @@ class Server {
 
     routes(): void {
         this.app.use( this.paths.auth , authRoutes );
+        this.app.use( this.paths.contacts , contactsRoutes );
         this.app.use( this.paths.users , usersRoutes );
     }
 

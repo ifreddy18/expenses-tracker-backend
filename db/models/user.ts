@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import db from '../connections';
+import { Contact } from './contact';
 
 export interface UserInstance extends Model {
 	uid: string;

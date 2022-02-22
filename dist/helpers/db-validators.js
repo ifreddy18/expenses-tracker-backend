@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userExistWithEmail = exports.userExistByUid = void 0;
+exports.contactExistByIdAndUid = exports.userExistWithEmail = exports.userExistByUid = void 0;
 const models_1 = require("../db/models");
 // Validate if the user exist by uid
 const userExistByUid = (uid = '') => __awaiter(void 0, void 0, void 0, function* () {
@@ -27,4 +27,14 @@ const userExistWithEmail = (email = '') => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.userExistWithEmail = userExistWithEmail;
+// Validate if exist a Contact with Id and uid
+// Must be used after validateJWT
+const contactExistByIdAndUid = (id = '', { req }) => __awaiter(void 0, void 0, void 0, function* () {
+    const { uid } = req.user;
+    const contactExist = yield models_1.Contact.findOne({ where: { id, uid } });
+    if (!contactExist) {
+        throw new Error(`The contact with id '${id}' doesn't exist ${uid}`);
+    }
+});
+exports.contactExistByIdAndUid = contactExistByIdAndUid;
 //# sourceMappingURL=db-validators.js.map

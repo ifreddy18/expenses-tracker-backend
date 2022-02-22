@@ -25,6 +25,7 @@ class Server {
         this.port = process.env.PORT || '8010';
         this.paths = {
             auth: this.apiVersion,
+            contacts: this.apiVersion + '/contacts',
             users: this.apiVersion + '/users',
         };
         // Conectar DB
@@ -58,6 +59,7 @@ class Server {
     }
     routes() {
         this.app.use(this.paths.auth, routes_1.authRoutes);
+        this.app.use(this.paths.contacts, routes_1.contactsRoutes);
         this.app.use(this.paths.users, routes_1.usersRoutes);
     }
     listen() {

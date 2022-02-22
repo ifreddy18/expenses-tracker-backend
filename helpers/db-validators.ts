@@ -1,4 +1,4 @@
-import { User } from '../db/models';
+import { Contact, User } from '../db/models';
 
 // Validate if the user exist by uid
 export const userExistByUid = async (uid = ''): Promise<void> => {
@@ -13,5 +13,15 @@ export const userExistWithEmail = async (email = ''): Promise<void> => {
     const emailExist = await User.findOne({ where: { email } });
     if (emailExist) {
         throw new Error(`The email '${email}' already exist`);
+    }
+};
+
+// Validate if exist a Contact with Id and uid
+// Must be used after validateJWT
+export const contactExistByIdAndUid = async (id = '', { req }: any): Promise<void> => {
+    const { uid } = req.user;
+    const contactExist = await Contact.findOne({ where: { id, uid }});
+    if (!contactExist) {
+        throw new Error(`The contact with id '${id}' doesn't exist ${uid}`);
     }
 };
