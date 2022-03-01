@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 
-import { User } from '../db/models';
+import { User } from '../../db/models';
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
 

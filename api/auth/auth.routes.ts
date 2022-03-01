@@ -2,11 +2,11 @@ import { Router } from 'express';
 import { check } from 'express-validator';
 
 // Middlewares
-import { validateInputs } from '../middlewares/validate-inputs';
+import { validateInputs } from '../../middlewares/validate-inputs';
 
 // Controllers
-import { getAuthState, login } from '../controllers/auth.controller';
-import { validateJWT } from '../middlewares/validate-jwt';
+import { getAuthState, login } from './auth.controller';
+import { validateJWT } from '../../middlewares/validate-jwt';
 
 const router = Router();
 

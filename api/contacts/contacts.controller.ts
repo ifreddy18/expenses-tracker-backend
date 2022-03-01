@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { Contact, User } from '../db/models';
+import { Contact, User } from '../../db/models';
 
 export const getContacts = async (req: Request, res: Response): Promise<void> => {
 

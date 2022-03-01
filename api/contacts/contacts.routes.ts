@@ -2,10 +2,10 @@ import { Router } from 'express';
 import { body, check } from 'express-validator';
 
 // Helpers
-import { contactExistByIdAndUid } from '../helpers/db-validators';
+import { contactExistByIdAndUid } from '../../helpers/db-validators';
 
 // Middlewares
-import { validateInputs, validateJWT } from '../middlewares';
+import { validateInputs, validateJWT } from '../../middlewares';
 
 // Controllers
 import {
@@ -14,7 +14,7 @@ import {
     createContact,
     updateContact,
     deleteContact,
-} from '../controllers/contacts.controller';
+} from './contacts.controller';
 
 const router = Router();
 

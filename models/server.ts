@@ -10,7 +10,7 @@ import {
     authRoutes,
     contactsRoutes,
     usersRoutes,
-} from '../routes';
+} from '../api';
 
 // Add properties to Request
 declare module 'express-serve-static-core' {

@@ -17,7 +17,7 @@ const cors_1 = __importDefault(require("cors"));
 // Database
 const connections_1 = __importDefault(require("../db/connections"));
 // Routes
-const routes_1 = require("../routes");
+const api_1 = require("../api");
 class Server {
     constructor() {
         this.apiVersion = '/api/v1';
@@ -58,9 +58,9 @@ class Server {
         this.app.use(express_1.default.static('public'));
     }
     routes() {
-        this.app.use(this.paths.auth, routes_1.authRoutes);
-        this.app.use(this.paths.contacts, routes_1.contactsRoutes);
-        this.app.use(this.paths.users, routes_1.usersRoutes);
+        this.app.use(this.paths.auth, api_1.authRoutes);
+        this.app.use(this.paths.contacts, api_1.contactsRoutes);
+        this.app.use(this.paths.users, api_1.usersRoutes);
     }
     listen() {
         this.app.listen(this.port, () => {
