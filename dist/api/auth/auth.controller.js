@@ -15,48 +15,49 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAuthState = exports.login = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const models_1 = require("../../db/models");
-const generate_jwt_1 = require("../../helpers/generate-jwt");
+const generate_jwt_1 = require("../../common/helpers/generate-jwt");
+// Response Manager
+const responseManager_1 = require("../../common/responseManager");
+// Error handler
+const errorManager_1 = require("../../common/errorManager");
+const classes_1 = require("../../classes");
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
         // Verify if user exist by email
         const user = yield models_1.User.findOne({ where: { email } });
-        if (!user) {
-            res.status(400).json({
-                msg: 'Wrong email or password'
-            });
-            return;
-        }
-        // Verify if user is active (status === 1)
-        if (user.status !== 1) {
-            res.status(400).json({
-                msg: 'Wrong email or password'
-            });
-            return;
+        if (!user || user.status === 0) {
+            throw new classes_1.ResponseError(400, errorManager_1.authErrosCodes.AUTH_NOT_VALID_CREDENTIALS);
         }
         // Verify password
         const validPassword = bcryptjs_1.default.compareSync(password, user.password);
         if (!validPassword) {
-            res.status(400).json({
-                msg: 'Wrong email or password'
-            });
-            return;
+            throw new classes_1.ResponseError(400, errorManager_1.authErrosCodes.AUTH_NOT_VALID_CREDENTIALS);
         }
         // Generar el JWT
         const token = yield (0, generate_jwt_1.generateJWT)({
             uid: user.uid,
         });
-        res.status(200).json({ user, token });
+        // Response
+        const resData = (0, responseManager_1.CommonResponseBuilder)(200, errorManager_1.WITHOUT_ERRORS);
+        resData.data = { user, token };
+        (0, responseManager_1.responseHandler)(res, resData);
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({ msg: 'Talk to the admin' });
+        (0, responseManager_1.catchErrorResponse)(res, error, {
+            httpStatus: 500,
+            errorCode: errorManager_1.commonErrorsCodes.UNKNOWN_ERROR,
+        });
     }
 });
 exports.login = login;
 const getAuthState = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { uid, email, name } = req.user;
-    res.status(200).json({ uid, email, name });
+    // Response
+    const resData = (0, responseManager_1.CommonResponseBuilder)(200, errorManager_1.WITHOUT_ERRORS);
+    resData.data = { uid, email, name };
+    (0, responseManager_1.responseHandler)(res, resData);
 });
 exports.getAuthState = getAuthState;
 //# sourceMappingURL=auth.controller.js.map

@@ -1,25 +1,31 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
+import { authErrosCodes, commonErrorsCodes } from '../../common/errorManager';
 
 // Middlewares
-import { validateInputs } from '../../middlewares/validate-inputs';
+import {
+    validateJWT,
+    validateInputs
+} from '../../common/middlewares';
+
+// Paths
+import { paths } from '../routerPaths';
 
 // Controllers
 import { getAuthState, login } from './auth.controller';
-import { validateJWT } from '../../middlewares/validate-jwt';
 
 const router = Router();
 
 // Login a User
-router.post('/login', [
-    check('email', 'This isn\'t a valid email').isEmail(),
-    check('email', 'The email is required').not().isEmpty(),
-    check('password', 'The password is required').not().isEmpty(),
+router.post( paths.auth + '/login', [
+    check('email', commonErrorsCodes.EMAIL_IS_REQUIRED).not().isEmpty(),
+    check('email', commonErrorsCodes.BAD_FORMAT_EMAIL).isEmail(),
+    check('password', authErrosCodes.AUTH_PASSWORD_REQUIRED).not().isEmpty(),
     validateInputs
 ], login );
 
 // Login a User
-router.get('/auth-state', [
+router.get( paths.auth + '/auth-state', [
     validateJWT,
     validateInputs
 ], getAuthState );

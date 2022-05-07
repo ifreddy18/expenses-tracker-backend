@@ -1,6 +1,9 @@
 import { DataTypes, Model } from 'sequelize';
 import db from '../connections';
+import { Account } from './account';
+import { Category } from './category';
 import { Contact } from './contact';
+import { Transaction } from './transaction';
 
 export interface UserInstance extends Model {
 	uid: string;
@@ -37,3 +40,10 @@ export const User = db.define<UserInstance>('User', {
 }, {
 	tableName: 'users'
 });
+
+export const userAssociations = (): void => {
+    User.hasMany(Contact, { foreignKey: 'uid' });
+    User.hasMany(Category, { foreignKey: 'uid' });
+    User.hasMany(Account, { foreignKey: 'uid' });
+	User.hasMany(Transaction, { foreignKey: 'uid' });
+}

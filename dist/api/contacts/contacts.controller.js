@@ -11,41 +11,72 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteContact = exports.updateContact = exports.createContact = exports.getContactById = exports.getContacts = void 0;
 const models_1 = require("../../db/models");
+// Response Manager
+const responseManager_1 = require("../../common/responseManager");
+// Error handler
+const errorManager_1 = require("../../common/errorManager");
+const classes_1 = require("../../classes");
 const getContacts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { uid } = req.user;
     try {
         const contacts = yield models_1.Contact.findAll({ where: { uid } });
-        res.json(contacts);
+        // Response
+        const resData = (0, responseManager_1.CommonResponseBuilder)(200, errorManager_1.WITHOUT_ERRORS);
+        resData.data = contacts;
+        (0, responseManager_1.responseHandler)(res, resData);
     }
     catch (error) {
         console.log({ error });
-        res.status(500).json({ msg: 'Talk with the admin' });
+        (0, responseManager_1.catchErrorResponse)(res, error, {
+            httpStatus: 500,
+            errorCode: errorManager_1.commonErrorsCodes.UNKNOWN_ERROR,
+        });
     }
 });
 exports.getContacts = getContacts;
 const getContactById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
+    const { uid } = req.user;
     try {
-        const contact = yield models_1.Contact.findByPk(id);
-        res.json(contact);
+        const contact = yield models_1.Contact.findOne({ where: { id, uid } });
+        // Response
+        const resData = (0, responseManager_1.CommonResponseBuilder)(200, errorManager_1.WITHOUT_ERRORS);
+        resData.data = contact;
+        (0, responseManager_1.responseHandler)(res, resData);
     }
     catch (error) {
         console.log({ error });
-        res.status(500).json({ msg: 'Talk with the admin' });
+        (0, responseManager_1.catchErrorResponse)(res, error, {
+            httpStatus: 500,
+            errorCode: errorManager_1.commonErrorsCodes.UNKNOWN_ERROR,
+        });
     }
 });
 exports.getContactById = getContactById;
 const createContact = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name } = req.body;
+    const { name, contactType } = req.body;
     const { uid } = req.user;
     try {
         // Create and save
-        const contact = yield models_1.Contact.create({ name, uid });
-        res.json({ msg: 'Contact created successfully', contact });
+        const contact = yield models_1.Contact.create({
+            name,
+            uid,
+            contact_type_id: contactType
+        });
+        if (!contact)
+            throw new classes_1.ResponseError(500, errorManager_1.commonErrorsCodes.FAIL_TO_INSERT_RECORD);
+        // Response
+        const resData = (0, responseManager_1.CommonResponseBuilder)(200, errorManager_1.WITHOUT_ERRORS);
+        resData.data = contact;
+        resData.appStatusMessage = 'Contact created successfully';
+        (0, responseManager_1.responseHandler)(res, resData);
     }
     catch (error) {
         console.log({ error });
-        res.status(500).json({ msg: 'Talk with the admin' });
+        (0, responseManager_1.catchErrorResponse)(res, error, {
+            httpStatus: 500,
+            errorCode: errorManager_1.commonErrorsCodes.UNKNOWN_ERROR,
+        });
     }
 });
 exports.createContact = createContact;
@@ -55,13 +86,20 @@ const updateContact = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const contact = yield models_1.Contact.findByPk(id);
         // Update contact
-        if (contact)
-            yield contact.update({ name });
-        res.json(contact);
+        if (!contact)
+            throw new classes_1.ResponseError(500, errorManager_1.commonErrorsCodes.FAIL_TO_UPDATE_RECORD);
+        yield contact.update({ name });
+        // Response
+        const resData = (0, responseManager_1.CommonResponseBuilder)(200, errorManager_1.WITHOUT_ERRORS);
+        resData.appStatusMessage = 'Contact updated successfully';
+        (0, responseManager_1.responseHandler)(res, resData);
     }
     catch (error) {
         console.log({ error });
-        res.status(500).json({ msg: 'Talk with the admin' });
+        (0, responseManager_1.catchErrorResponse)(res, error, {
+            httpStatus: 500,
+            errorCode: errorManager_1.commonErrorsCodes.UNKNOWN_ERROR,
+        });
     }
 });
 exports.updateContact = updateContact;
@@ -70,13 +108,20 @@ const deleteContact = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const contact = yield models_1.Contact.findByPk(id);
         // Borrado fisico
-        if (contact)
-            yield contact.destroy();
-        res.json({ msg: `Contact delete successfully` });
+        if (!contact)
+            throw new classes_1.ResponseError(500, errorManager_1.commonErrorsCodes.FAIL_TO_DELETE_RECORD);
+        yield contact.update({ status: 0 });
+        // Response
+        const resData = (0, responseManager_1.CommonResponseBuilder)(200, errorManager_1.WITHOUT_ERRORS);
+        resData.appStatusMessage = 'Contact deleted successfully';
+        (0, responseManager_1.responseHandler)(res, resData);
     }
     catch (error) {
         console.log({ error });
-        res.status(500).json({ msg: 'Talk with the admin' });
+        (0, responseManager_1.catchErrorResponse)(res, error, {
+            httpStatus: 500,
+            errorCode: errorManager_1.commonErrorsCodes.UNKNOWN_ERROR,
+        });
     }
 });
 exports.deleteContact = deleteContact;

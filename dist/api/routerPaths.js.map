@@ -1,0 +1,1 @@
+{"version":3,"file":"routerPaths.js","sourceRoot":"","sources":["../../api/routerPaths.ts"],"names":[],"mappings":";;;AAAA,MAAM,WAAW,GAAG,SAAS,CAAC;AAE9B,MAAM,cAAc,GAAG,WAAW,CAAC;AAS/B,wCAAc;AAPlB,MAAM,KAAK,GAAG;IACV,IAAI,EAAE,cAAc;IACpB,QAAQ,EAAE,cAAc,GAAG,WAAW;IACtC,KAAK,EAAE,cAAc,GAAG,QAAQ;CACnC,CAAC;AAIE,sBAAK"}

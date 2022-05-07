@@ -3,9 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.userAssociations = exports.User = void 0;
 const sequelize_1 = require("sequelize");
 const connections_1 = __importDefault(require("../connections"));
+const account_1 = require("./account");
+const category_1 = require("./category");
+const contact_1 = require("./contact");
+const transaction_1 = require("./transaction");
 exports.User = connections_1.default.define('User', {
     uid: {
         primaryKey: true,
@@ -33,4 +37,11 @@ exports.User = connections_1.default.define('User', {
 }, {
     tableName: 'users'
 });
+const userAssociations = () => {
+    exports.User.hasMany(contact_1.Contact, { foreignKey: 'uid' });
+    exports.User.hasMany(category_1.Category, { foreignKey: 'uid' });
+    exports.User.hasMany(account_1.Account, { foreignKey: 'uid' });
+    exports.User.hasMany(transaction_1.Transaction, { foreignKey: 'uid' });
+};
+exports.userAssociations = userAssociations;
 //# sourceMappingURL=user.js.map

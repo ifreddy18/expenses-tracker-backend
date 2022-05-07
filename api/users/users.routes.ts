@@ -2,10 +2,16 @@ import { Router } from 'express';
 import { check } from 'express-validator';
 
 // Helpers
-import { userExistByUid, userExistWithEmail } from '../../helpers/db-validators';
+import {
+    userExistByUid,
+    userExistWithEmail
+} from '../../common/helpers/db-validators';
 
 // Middlewares
-import { validateInputs } from '../../middlewares/validate-inputs';
+import { validateInputs } from '../../common/middlewares/validate-inputs';
+
+// Paths
+import { paths } from '../routerPaths';
 
 // Controllers
 import {
@@ -16,34 +22,38 @@ import {
     deleteUser
 } from './users.controller';
 
+// Error Manager
+import { authErrosCodes, commonErrorsCodes } from '../../common/errorManager';
+
 const router = Router();
 
 // Get all Users
-router.get('/', getUsers );
+router.get( paths.users + '/', getUsers );
 
 // Get a User by uid
-router.get('/:uid', [
+router.get( paths.users + '/:uid', [
     check('uid').custom( userExistByUid ),
     validateInputs
 ], getUserByUid );
 
 // Create a User
-router.post('/', [
-    check('name', 'The name is obligatory').not().isEmpty(),
-    check('password', 'The password must contain at least 6 characters').isLength({ min: 6 }),
-    check('email', 'This isn\'t a valid email').isEmail(),
+router.post( paths.users + '/', [
+    check('name', commonErrorsCodes.NAME_IS_REQUIRED).not().isEmpty(),
+    check('password', authErrosCodes.AUTH_INVALID_PASSWORD).isLength({ min: 6 }),
+    check('email', commonErrorsCodes.EMAIL_IS_REQUIRED).not().isEmpty(),
+    check('email', commonErrorsCodes.BAD_FORMAT_EMAIL).isEmail(),
     check('email').custom( userExistWithEmail ),
     validateInputs
 ], createUser );
 
 // Update a User
-router.put('/:uid', [
+router.put( paths.users + '/:uid', [
     check('uid').custom( userExistByUid ),
     validateInputs
 ], updateUser );
 
 // Delete a User
-router.delete('/:uid', [
+router.delete( paths.users + '/:uid', [
     check('uid').custom( userExistByUid ),
     validateInputs
 ], deleteUser );

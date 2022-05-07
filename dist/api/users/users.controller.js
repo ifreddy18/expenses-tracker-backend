@@ -26,14 +26,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.createUser = exports.getUserByUid = exports.getUsers = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const models_1 = require("../../db/models");
+// Response Manager
+const responseManager_1 = require("../../common/responseManager");
+// Error handler
+const errorManager_1 = require("../../common/errorManager");
+const classes_1 = require("../../classes");
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield models_1.User.findAll({ where: { status: 1 } });
-        res.json(users);
+        // Response
+        const resData = (0, responseManager_1.CommonResponseBuilder)(200, errorManager_1.WITHOUT_ERRORS);
+        resData.data = users;
+        (0, responseManager_1.responseHandler)(res, resData);
     }
     catch (error) {
         console.log({ error });
-        res.status(500).json({ msg: 'Talk with the admin' });
+        (0, responseManager_1.catchErrorResponse)(res, error, {
+            httpStatus: 500,
+            errorCode: errorManager_1.commonErrorsCodes.UNKNOWN_ERROR,
+        });
     }
 });
 exports.getUsers = getUsers;
@@ -42,27 +53,42 @@ const getUserByUid = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         // Search in DB
         const user = yield models_1.User.findByPk(uid);
-        res.json(user);
+        // Response
+        const resData = (0, responseManager_1.CommonResponseBuilder)(200, errorManager_1.WITHOUT_ERRORS);
+        resData.data = user;
+        (0, responseManager_1.responseHandler)(res, resData);
     }
     catch (error) {
         console.log({ error });
-        res.status(500).json({ msg: 'Talk with the admin' });
+        (0, responseManager_1.catchErrorResponse)(res, error, {
+            httpStatus: 500,
+            errorCode: errorManager_1.commonErrorsCodes.UNKNOWN_ERROR,
+        });
     }
 });
 exports.getUserByUid = getUserByUid;
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const _a = req.body, { password } = _a, restUser = __rest(_a, ["password"]);
-    // Encrypt password
-    const salt = bcryptjs_1.default.genSaltSync();
-    const bcryptPassword = bcryptjs_1.default.hashSync(password, salt);
     try {
+        // Encrypt password
+        const salt = bcryptjs_1.default.genSaltSync();
+        const bcryptPassword = bcryptjs_1.default.hashSync(password, salt);
         // Create and save
         const user = yield models_1.User.create(Object.assign(Object.assign({}, restUser), { password: bcryptPassword }));
-        res.json({ msg: 'User created successfully', user: Object.assign({}, restUser) });
+        if (!user)
+            throw new classes_1.ResponseError(500, errorManager_1.commonErrorsCodes.FAIL_TO_INSERT_RECORD);
+        // Response
+        const resData = (0, responseManager_1.CommonResponseBuilder)(200, errorManager_1.WITHOUT_ERRORS);
+        resData.data = Object.assign({}, restUser);
+        resData.appStatusMessage = 'User created successfully';
+        (0, responseManager_1.responseHandler)(res, resData);
     }
     catch (error) {
         console.log({ error });
-        res.status(500).json({ msg: 'Talk with the admin' });
+        (0, responseManager_1.catchErrorResponse)(res, error, {
+            httpStatus: 500,
+            errorCode: errorManager_1.commonErrorsCodes.UNKNOWN_ERROR,
+        });
     }
 });
 exports.createUser = createUser;
@@ -71,14 +97,24 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const { body } = req;
     try {
         const user = yield models_1.User.findByPk(uid);
-        // Update user
-        if (user)
-            yield user.update(body);
-        res.json(user);
+        if (!user)
+            throw new classes_1.ResponseError(500, errorManager_1.commonErrorsCodes.FAIL_TO_UPDATE_RECORD);
+        yield user.update(body, { where: { uid } });
+        // Response
+        const resData = (0, responseManager_1.CommonResponseBuilder)(200, errorManager_1.WITHOUT_ERRORS);
+        resData.data = {
+            name: user === null || user === void 0 ? void 0 : user.name,
+            email: user === null || user === void 0 ? void 0 : user.email,
+        };
+        resData.appStatusMessage = 'User updated successfully';
+        (0, responseManager_1.responseHandler)(res, resData);
     }
     catch (error) {
         console.log({ error });
-        res.status(500).json({ msg: 'Talk with the admin' });
+        (0, responseManager_1.catchErrorResponse)(res, error, {
+            httpStatus: 500,
+            errorCode: errorManager_1.commonErrorsCodes.UNKNOWN_ERROR,
+        });
     }
 });
 exports.updateUser = updateUser;
@@ -87,13 +123,24 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const user = yield models_1.User.findByPk(uid);
         // Logic delete
-        if (user)
-            yield user.update({ status: 0 });
-        res.json({ msg: `User delete successfully` });
+        if (!user)
+            throw new classes_1.ResponseError(500, errorManager_1.commonErrorsCodes.FAIL_TO_DELETE_RECORD);
+        yield user.update({ status: 0 });
+        // Response
+        const resData = (0, responseManager_1.CommonResponseBuilder)(200, errorManager_1.WITHOUT_ERRORS);
+        resData.data = {
+            name: user === null || user === void 0 ? void 0 : user.name,
+            email: user === null || user === void 0 ? void 0 : user.email,
+        };
+        resData.appStatusMessage = 'User deleted successfully';
+        (0, responseManager_1.responseHandler)(res, resData);
     }
     catch (error) {
         console.log({ error });
-        res.status(500).json({ msg: 'Talk with the admin' });
+        (0, responseManager_1.catchErrorResponse)(res, error, {
+            httpStatus: 500,
+            errorCode: errorManager_1.commonErrorsCodes.UNKNOWN_ERROR,
+        });
     }
 });
 exports.deleteUser = deleteUser;
