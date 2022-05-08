@@ -44,8 +44,8 @@ class Server {
             await db.authenticate();
             console.log('Database online');
 
-            await db.sync();
-            // await db.sync({ alter: true });
+            // await db.sync();
+            await db.sync({ alter: true });
 
         } catch (error: any) {
             throw new Error( error );
