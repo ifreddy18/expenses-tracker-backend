@@ -8,10 +8,9 @@ const validateInputs = (req, res, next) => {
     // Retener errores - express-validator
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
-        const { msg: _appStatusCode } = (errors.array({ onlyFirstError: true }))[0];
+        const { msg } = (errors.array({ onlyFirstError: true }))[0];
         try {
-            const appStatusCode = Number(_appStatusCode);
-            const responseData = (0, responseManager_1.CommonResponseBuilder)(builtHttpCode(appStatusCode), appStatusCode, errors.array());
+            const responseData = (0, responseManager_1.CommonResponseBuilder)(builtHttpCode(errorManager_1.commonErrorsCodes.ERROR_IN_MIDDLEWARE), errorManager_1.commonErrorsCodes.ERROR_IN_MIDDLEWARE, errors.array(), msg);
             (0, responseManager_1.responseHandler)(res, responseData);
         }
         catch (error) {

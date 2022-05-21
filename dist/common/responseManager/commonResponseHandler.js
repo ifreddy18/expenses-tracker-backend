@@ -13,7 +13,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.responseHandler = exports.CommonResponseBuilder = void 0;
 const errorManager_1 = require("../errorManager");
-const CommonResponseBuilder = (httpStatus, appStatusCode, errors = [], message) => {
+const CommonResponseBuilder = (httpStatus, appStatusCode, errors = [], message = null) => {
     const appStatusName = (0, errorManager_1.getErrorName)(appStatusCode);
     const appStatusMessage = message || (0, errorManager_1.getErrorMessage)(appStatusCode) || '';
     const data = {

@@ -1,4 +1,8 @@
-import { Contact, User } from '../../db/models';
+import {
+    Category,
+    Contact,
+    User
+} from '../../db/models';
 
 // Validate if the user exist by uid
 export const userExistByUid = async (uid = ''): Promise<void> => {
@@ -16,16 +20,13 @@ export const userExistWithEmail = async (email = ''): Promise<void> => {
     }
 };
 
-// Validate if exist a Contact with Id and uid
+// Validate if exist a model with Id and uid
 // Must be used after validateJWT
-export const contactExistByIdAndUid = async (id = '', { req }: any): Promise<void> => {
+export const modelExistByIdAndUid = async(id = '', { req }: any): Promise<void> => {
     const { uid } = req.user;
-    const contactExist = await Contact.findOne({ where: { id, uid }});
-    if (!contactExist) {
-        throw new Error(`The contact with id '${id}' doesn't exist ${uid}`);
+    const { model, modelName = 'model' } = req.model;
+    const modelExist = await model.findOne({ where: { id, uid }});
+    if (!modelExist) {
+        throw new Error(`The ${modelName} with id '${id}' and uid ${uid} doesn't exist`);
     }
-};
-
-export const modelExistById = async(model = '', id = ''): Promise<void> => {
-
 }

@@ -38,9 +38,10 @@ const buildErrorDataContainer = (errorCode: number) : CommonErrorDataContainer =
 
 const commonErrorsCodes = {
     UNKNOWN_ERROR: nextErrorNumber('UNKNOWN_ERROR', 'Unknown error'),
+    ERROR_IN_MIDDLEWARE: nextErrorNumber('ERROR_IN_MIDDLEWARE'),
     BAD_FORMAT_EMAIL: nextErrorNumber('BAD_FORMAT_EMAIL', 'This isn\'t a valid email'),
     EMAIL_IS_REQUIRED: nextErrorNumber('EMAIL_IS_REQUIRED', 'The email is required'),
-    FAIL_TO_GET_RECORD: nextErrorNumber('FAIL_TO_GET_RECORD'),
+    FAIL_TO_GET_RECORD: nextErrorNumber('FAIL_TO_GET_RECORD', 'Fail to get record'),
     FAIL_TO_INSERT_RECORD: nextErrorNumber('FAIL_TO_INSERT_RECORD'),
     FAIL_TO_UPDATE_RECORD: nextErrorNumber('FAIL_TO_UPDATE_RECORD'),
     FAIL_TO_DELETE_RECORD: nextErrorNumber('FAIL_TO_DELETE_RECORD'),

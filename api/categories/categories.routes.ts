@@ -9,59 +9,59 @@ import { validateInputs, validateJWT } from '../../common/middlewares';
 
 // Controllers
 import {
-    getContacts,
-    getContactById,
-    createContact,
-    updateContact,
-    deleteContact,
-} from './contacts.controller';
+    getCategories,
+    getCategoryById,
+    createCategory,
+    updateCategory,
+    deleteCategory,
+} from './categories.controller';
 
 // Error Manager
 import { commonErrorsCodes } from '../../common/errorManager';
-import { Contact } from '../../db/models/contact';
+import { Category } from '../../db/models/category';
 
 const router = Router();
 
 router.use((req, res, next) => {
     req.model = {
-        model: Contact,
-        modelName: 'contact',
+        model: Category,
+        modelName: 'category',
     };
     next();
 });
 
-// Get all Contacts for a User
+// Get all Category for a User
 router.get('/', [
     validateJWT,
     validateInputs,
-], getContacts );
+], getCategories );
 
-// Get a Contact by uid
+// Get a Category by uid
 router.get('/:id', [
     validateJWT,
     check('id').custom( modelExistByIdAndUid ),
     validateInputs
-], getContactById );
+], getCategoryById );
 
-// Create a Contact
+// Create a Category
 router.post('/', [
     validateJWT,
     check('name', commonErrorsCodes.NAME_IS_REQUIRED).not().isEmpty(),
     validateInputs
-], createContact );
+], createCategory );
 
-// Update a Contact
+// Update a Category
 router.put('/:id', [
     validateJWT,
     check('id').custom( modelExistByIdAndUid ),
     validateInputs
-], updateContact );
+], updateCategory );
 
-// Delete a Contact
+// Delete a Category
 router.delete('/:id', [
     validateJWT,
     check('id').custom( modelExistByIdAndUid ),
     validateInputs
-], deleteContact );
+], deleteCategory );
 
 export default router;

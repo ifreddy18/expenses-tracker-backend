@@ -42,7 +42,7 @@ exports.Category = connections_1.default.define('Category', {
 });
 const categoryAssociations = () => {
     exports.Category.hasOne(exports.Category, { foreignKey: 'parentId', onDelete: 'cascade' });
-    exports.Category.belongsTo(exports.Category, { foreignKey: 'parentId', onDelete: 'cascade' });
+    exports.Category.belongsTo(exports.Category, { foreignKey: 'parentId', as: 'parent', onDelete: 'cascade' });
     exports.Category.belongsTo(user_1.User, { foreignKey: 'uid' });
     exports.Category.hasMany(trx_category_1.TrxCategory, { foreignKey: 'categoryId' });
     exports.Category.hasMany(trx_category_1.TrxCategory, { foreignKey: 'subcategoryId' });

@@ -7,8 +7,9 @@ const catchErrorResponse = (res, error, defaultValues) => {
     const isResponseError = error instanceof classes_1.ResponseError;
     const httpStatus = isResponseError ? error.httpStatus : defaultValues.httpStatus;
     const errorCode = isResponseError ? error.errorCode : defaultValues.errorCode;
+    const message = (isResponseError ? error.message : defaultValues === null || defaultValues === void 0 ? void 0 : defaultValues.message) || null;
     const errors = isResponseError ? [] : [error];
-    const responseData = (0, _1.CommonResponseBuilder)(httpStatus, errorCode, errors);
+    const responseData = (0, _1.CommonResponseBuilder)(httpStatus, errorCode, errors, message);
     (0, _1.responseHandler)(res, responseData);
 };
 exports.catchErrorResponse = catchErrorResponse;

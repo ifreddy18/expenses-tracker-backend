@@ -8,16 +8,13 @@ import {
     validateInputs
 } from '../../common/middlewares';
 
-// Paths
-import { paths } from '../routerPaths';
-
 // Controllers
 import { getAuthState, login } from './auth.controller';
 
 const router = Router();
 
 // Login a User
-router.post( paths.auth + '/login', [
+router.post('/login', [
     check('email', commonErrorsCodes.EMAIL_IS_REQUIRED).not().isEmpty(),
     check('email', commonErrorsCodes.BAD_FORMAT_EMAIL).isEmail(),
     check('password', authErrosCodes.AUTH_PASSWORD_REQUIRED).not().isEmpty(),
@@ -25,7 +22,7 @@ router.post( paths.auth + '/login', [
 ], login );
 
 // Login a User
-router.get( paths.auth + '/auth-state', [
+router.get('/auth-state', [
     validateJWT,
     validateInputs
 ], getAuthState );

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import { commonErrorsCodes, authErrosCodes } from '../errorManager';
-import { catchErrorResponse, CommonResponseBuilder, responseHandler } from '../responseManager';
+import { CommonResponseBuilder, responseHandler } from '../responseManager';
 
 export const validateInputs = (req: Request, res: Response, next: NextFunction):
     Response<any, Record<string, any>> | undefined | void => {
@@ -10,14 +10,14 @@ export const validateInputs = (req: Request, res: Response, next: NextFunction):
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        const { msg: _appStatusCode } = (errors.array({ onlyFirstError: true }))[0];
+        const { msg } = (errors.array({ onlyFirstError: true }))[0];
 
         try {
-            const appStatusCode = Number(_appStatusCode);
             const responseData = CommonResponseBuilder(
-                builtHttpCode(appStatusCode),
-                appStatusCode,
-                errors.array()
+                builtHttpCode(commonErrorsCodes.ERROR_IN_MIDDLEWARE),
+                commonErrorsCodes.ERROR_IN_MIDDLEWARE,
+                errors.array(),
+                msg,
             );
             responseHandler(res, responseData);
         }
@@ -35,7 +35,6 @@ export const validateInputs = (req: Request, res: Response, next: NextFunction):
 
     next();
 };
-
 
 const builtHttpCode = (appStatus: number): number => {
     return (

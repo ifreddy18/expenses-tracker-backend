@@ -35,8 +35,8 @@ class Server {
                 // Test connection
                 yield db_1.default.authenticate();
                 console.log('Database online');
-                // await db.sync();
-                yield db_1.default.sync({ alter: true });
+                yield db_1.default.sync();
+                // await db.sync({ alter: true });
             }
             catch (error) {
                 throw new Error(error);
@@ -52,7 +52,8 @@ class Server {
         this.app.use(express_1.default.static('public'));
     }
     routes() {
-        this.app.use('/', api_1.routes);
+        for (const { path, router } of api_1.routes)
+            this.app.use(path, router);
     }
     listen() {
         this.app.listen(this.port, () => {

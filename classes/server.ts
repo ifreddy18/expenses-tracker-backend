@@ -7,11 +7,13 @@ import db from '../db';
 
 // Routes
 import { routes } from '../api';
+import { SequelizeReqModel } from '../common/interfaces';
 
 // Add properties to Request
 declare module 'express-serve-static-core' {
     interface Request {
-        user: UserInstance
+        user: UserInstance,
+        model: SequelizeReqModel
     }
     // tslint:disable-next-line: no-empty-interface
     interface Response {}
@@ -44,8 +46,8 @@ class Server {
             await db.authenticate();
             console.log('Database online');
 
-            // await db.sync();
-            await db.sync({ alter: true });
+            await db.sync();
+            // await db.sync({ alter: true });
 
         } catch (error: any) {
             throw new Error( error );
@@ -66,7 +68,7 @@ class Server {
     }
 
     routes(): void {
-        this.app.use('/', routes );
+        for(const { path, router } of routes) this.app.use(path, router);
     }
 
     listen(): void {

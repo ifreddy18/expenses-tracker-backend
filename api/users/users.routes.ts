@@ -10,9 +10,6 @@ import {
 // Middlewares
 import { validateInputs } from '../../common/middlewares/validate-inputs';
 
-// Paths
-import { paths } from '../routerPaths';
-
 // Controllers
 import {
     getUsers,
@@ -28,16 +25,16 @@ import { authErrosCodes, commonErrorsCodes } from '../../common/errorManager';
 const router = Router();
 
 // Get all Users
-router.get( paths.users + '/', getUsers );
+router.get('/', getUsers );
 
 // Get a User by uid
-router.get( paths.users + '/:uid', [
+router.get('/:uid', [
     check('uid').custom( userExistByUid ),
     validateInputs
 ], getUserByUid );
 
 // Create a User
-router.post( paths.users + '/', [
+router.post('/', [
     check('name', commonErrorsCodes.NAME_IS_REQUIRED).not().isEmpty(),
     check('password', authErrosCodes.AUTH_INVALID_PASSWORD).isLength({ min: 6 }),
     check('email', commonErrorsCodes.EMAIL_IS_REQUIRED).not().isEmpty(),
@@ -47,13 +44,13 @@ router.post( paths.users + '/', [
 ], createUser );
 
 // Update a User
-router.put( paths.users + '/:uid', [
+router.put('/:uid', [
     check('uid').custom( userExistByUid ),
     validateInputs
 ], updateUser );
 
 // Delete a User
-router.delete( paths.users + '/:uid', [
+router.delete('/:uid', [
     check('uid').custom( userExistByUid ),
     validateInputs
 ], deleteUser );

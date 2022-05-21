@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.modelExistById = exports.contactExistByIdAndUid = exports.userExistWithEmail = exports.userExistByUid = void 0;
+exports.modelExistByIdAndUid = exports.userExistWithEmail = exports.userExistByUid = void 0;
 const models_1 = require("../../db/models");
 // Validate if the user exist by uid
 const userExistByUid = (uid = '') => __awaiter(void 0, void 0, void 0, function* () {
@@ -27,17 +27,15 @@ const userExistWithEmail = (email = '') => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.userExistWithEmail = userExistWithEmail;
-// Validate if exist a Contact with Id and uid
+// Validate if exist a model with Id and uid
 // Must be used after validateJWT
-const contactExistByIdAndUid = (id = '', { req }) => __awaiter(void 0, void 0, void 0, function* () {
+const modelExistByIdAndUid = (id = '', { req }) => __awaiter(void 0, void 0, void 0, function* () {
     const { uid } = req.user;
-    const contactExist = yield models_1.Contact.findOne({ where: { id, uid } });
-    if (!contactExist) {
-        throw new Error(`The contact with id '${id}' doesn't exist ${uid}`);
+    const { model, modelName = 'model' } = req.model;
+    const modelExist = yield model.findOne({ where: { id, uid } });
+    if (!modelExist) {
+        throw new Error(`The ${modelName} with id '${id}' and uid ${uid} doesn't exist`);
     }
 });
-exports.contactExistByIdAndUid = contactExistByIdAndUid;
-const modelExistById = (model = '', id = '') => __awaiter(void 0, void 0, void 0, function* () {
-});
-exports.modelExistById = modelExistById;
+exports.modelExistByIdAndUid = modelExistByIdAndUid;
 //# sourceMappingURL=db-validators.js.map

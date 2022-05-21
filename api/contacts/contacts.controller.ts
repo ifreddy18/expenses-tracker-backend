@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-
-import { Contact, User } from '../../db/models';
+import { Contact } from '../../db/models';
 // Response Manager
 import {
 	catchErrorResponse,

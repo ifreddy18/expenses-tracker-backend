@@ -47,7 +47,7 @@ export const Category = db.define<CategoryInstance>('Category', {
 
 export const categoryAssociations = (): void => {
 	Category.hasOne(Category, { foreignKey: 'parentId', onDelete: 'cascade' });
-    Category.belongsTo(Category, { foreignKey: 'parentId', onDelete: 'cascade' });
+    Category.belongsTo(Category, { foreignKey: 'parentId', as: 'parent', onDelete: 'cascade' });
     Category.belongsTo(User, { foreignKey: 'uid' });
 	Category.hasMany(TrxCategory, { foreignKey: 'categoryId' });
 	Category.hasMany(TrxCategory, { foreignKey: 'subcategoryId' });

@@ -8,6 +8,7 @@ const paths = {
     auth: currentApiPath,
     contacts: currentApiPath + '/contacts',
     users: currentApiPath + '/users',
+    category: currentApiPath + '/category',
 };
 exports.paths = paths;
 //# sourceMappingURL=routerPaths.js.map
