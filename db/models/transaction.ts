@@ -1,6 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 import db from '../connections';
-import { AccountByCurrency } from './account_by_currency';
+import { Account } from './account';
 import { TrxCategory } from './trx_category';
 import { TrxStatus } from './trx_status';
 import { TrxType } from './trx_type';
@@ -51,10 +51,10 @@ export const Transaction = db.define<TransactionInstance>('Transaction', {
         allowNull: false,
         field: 'trx_type_id',
     },
-    accountByCurrencyId: {
+    accountId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        field: 'account_by_currency_id',
+        field: 'account_id',
     },
     amount: {
         type: DataTypes.DECIMAL,
@@ -89,5 +89,5 @@ export const transactionAssociations = (): void => {
     Transaction.hasOne(TrxCategory, { foreignKey: 'trxId' });
     Transaction.belongsTo(TrxStatus, { foreignKey: 'trxStatusId' });
     Transaction.belongsTo(TrxType, { foreignKey: 'trxTypeId' });
-    Transaction.belongsTo(AccountByCurrency, { foreignKey: 'accountByCurrencyId' });
+    Transaction.belongsTo(Account, { foreignKey: 'accountId' });
 }

@@ -3,40 +3,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.accountAssociations = exports.Account = void 0;
+exports.accountByCurrencyAssociations = exports.AccountByCurrency = void 0;
 const sequelize_1 = require("sequelize");
 const connections_1 = __importDefault(require("../connections"));
-const account_by_currency_1 = require("./account_by_currency");
-const user_1 = require("./user");
-exports.Account = connections_1.default.define('Account', {
+const account_1 = require("./account");
+const currency_1 = require("./currency");
+const transaction_1 = require("./transaction");
+exports.AccountByCurrency = connections_1.default.define('AccountByCurrency', {
     id: {
         primaryKey: true,
         type: sequelize_1.DataTypes.INTEGER,
         autoIncrement: true,
     },
-    uid: {
-        type: sequelize_1.DataTypes.UUID,
-        allowNull: false,
-    },
     name: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    url: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
-    },
-    status: {
+    accountId: {
+        type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
-        type: sequelize_1.DataTypes.TINYINT,
-        defaultValue: 1
+        field: 'account_id',
+    },
+    currencyCode: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        field: 'currency_code',
     },
 }, {
-    tableName: 'accounts'
+    tableName: 'accounts_by_currencies',
 });
-const accountAssociations = () => {
-    exports.Account.belongsTo(user_1.User, { foreignKey: 'uid' });
-    exports.Account.hasMany(account_by_currency_1.AccountByCurrency, { foreignKey: 'account_id' });
+const accountByCurrencyAssociations = () => {
+    exports.AccountByCurrency.belongsTo(currency_1.Currency, { foreignKey: 'currencyCode' });
+    exports.AccountByCurrency.belongsTo(account_1.Account, { foreignKey: 'accountId' });
+    exports.AccountByCurrency.hasMany(transaction_1.Transaction, { foreignKey: 'accountByCurrencyId' });
 };
-exports.accountAssociations = accountAssociations;
+exports.accountByCurrencyAssociations = accountByCurrencyAssociations;
 //# sourceMappingURL=accounts.js.map

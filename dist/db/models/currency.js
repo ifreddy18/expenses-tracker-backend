@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.currencyAssociations = exports.Currency = void 0;
 const sequelize_1 = require("sequelize");
 const connections_1 = __importDefault(require("../connections"));
-const account_by_currency_1 = require("./account_by_currency");
+const account_1 = require("./account");
 const currency_type_1 = require("./currency_type");
 exports.Currency = connections_1.default.define('Currency', {
     code: {
@@ -37,7 +37,7 @@ exports.Currency = connections_1.default.define('Currency', {
     timestamps: false,
 });
 const currencyAssociations = () => {
-    exports.Currency.hasMany(account_by_currency_1.AccountByCurrency, { foreignKey: 'currencyCode' });
+    exports.Currency.hasMany(account_1.Account, { foreignKey: 'currencyCode' });
     exports.Currency.belongsTo(currency_type_1.CurrencyType, { foreignKey: 'currencyTypeId' });
 };
 exports.currencyAssociations = currencyAssociations;

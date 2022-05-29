@@ -9,59 +9,60 @@ import { validateInputs, validateJWT } from '../../common/middlewares';
 
 // Controllers
 import {
-    getContacts,
-    getContactById,
-    createContact,
-    updateContact,
-    deleteContact,
-} from './contacts.controller';
+    getBanks,
+    getBankById,
+    createBank,
+    updateBank,
+    deleteBank,
+} from './banks.controller';
 
 // Error Manager
 import { commonErrorsCodes } from '../../common/errorManager';
-import { Contact } from '../../db/models/contact';
+import { Bank } from '../../db/models';
 
 const router = Router();
 
 router.use((req, res, next) => {
     req.model = {
-        model: Contact,
-        modelName: 'contact',
+        model: Bank,
+        modelName: 'bank',
     };
     next();
 });
 
-// Get all Contacts for a User
+// Get all Account for a User
 router.get('/', [
     validateJWT,
     validateInputs,
-], getContacts );
+], getBanks );
 
-// Get a Contact by uid
+// Get a Account by uid
 router.get('/:id', [
     validateJWT,
     check('id').custom( modelExistByIdAndUid ),
     validateInputs
-], getContactById );
+], getBankById );
 
-// Create a Contact
+// Create a Account
 router.post('/', [
     validateJWT,
     check('name', commonErrorsCodes.NAME_IS_REQUIRED).not().isEmpty(),
     validateInputs
-], createContact );
+], createBank );
 
-// Update a Contact
+// Update a Account
 router.put('/:id', [
     validateJWT,
     check('id').custom( modelExistByIdAndUid ),
+    check('name', commonErrorsCodes.NAME_IS_REQUIRED).not().isEmpty(),
     validateInputs
-], updateContact );
+], updateBank );
 
-// Delete a Contact
+// Delete a Account
 router.delete('/:id', [
     validateJWT,
     check('id').custom( modelExistByIdAndUid ),
     validateInputs
-], deleteContact );
+], deleteBank );
 
 export default router;

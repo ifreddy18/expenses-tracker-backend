@@ -15,6 +15,10 @@ exports.AccountByCurrency = connections_1.default.define('AccountByCurrency', {
         type: sequelize_1.DataTypes.INTEGER,
         autoIncrement: true,
     },
+    name: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
     accountId: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,

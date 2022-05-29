@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.transactionAssociations = exports.Transaction = void 0;
 const sequelize_1 = require("sequelize");
 const connections_1 = __importDefault(require("../connections"));
-const account_by_currency_1 = require("./account_by_currency");
+const account_1 = require("./account");
 const trx_category_1 = require("./trx_category");
 const trx_status_1 = require("./trx_status");
 const trx_type_1 = require("./trx_type");
@@ -40,10 +40,10 @@ exports.Transaction = connections_1.default.define('Transaction', {
         allowNull: false,
         field: 'trx_type_id',
     },
-    accountByCurrencyId: {
+    accountId: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
-        field: 'account_by_currency_id',
+        field: 'account_id',
     },
     amount: {
         type: sequelize_1.DataTypes.DECIMAL,
@@ -77,7 +77,7 @@ const transactionAssociations = () => {
     exports.Transaction.hasOne(trx_category_1.TrxCategory, { foreignKey: 'trxId' });
     exports.Transaction.belongsTo(trx_status_1.TrxStatus, { foreignKey: 'trxStatusId' });
     exports.Transaction.belongsTo(trx_type_1.TrxType, { foreignKey: 'trxTypeId' });
-    exports.Transaction.belongsTo(account_by_currency_1.AccountByCurrency, { foreignKey: 'accountByCurrencyId' });
+    exports.Transaction.belongsTo(account_1.Account, { foreignKey: 'accountId' });
 };
 exports.transactionAssociations = transactionAssociations;
 //# sourceMappingURL=transaction.js.map

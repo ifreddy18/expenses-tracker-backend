@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.modelExistByIdAndUid = exports.userExistWithEmail = exports.userExistByUid = void 0;
+exports.modelExistById = exports.modelExistByIdAndUid = exports.userExistWithEmail = exports.userExistByUid = void 0;
 const models_1 = require("../../db/models");
 // Validate if the user exist by uid
 const userExistByUid = (uid = '') => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,4 +38,13 @@ const modelExistByIdAndUid = (id = '', { req }) => __awaiter(void 0, void 0, voi
     }
 });
 exports.modelExistByIdAndUid = modelExistByIdAndUid;
+// Validate if exist a model with Id
+const modelExistById = (id = '', { req }) => __awaiter(void 0, void 0, void 0, function* () {
+    const { model, modelName = 'model' } = req.model;
+    const modelExist = yield model.findOne({ where: { id } });
+    if (!modelExist) {
+        throw new Error(`The ${modelName} with id '${id}' doesn't exist`);
+    }
+});
+exports.modelExistById = modelExistById;
 //# sourceMappingURL=db-validators.js.map

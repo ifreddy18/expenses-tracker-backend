@@ -3,8 +3,8 @@ import { Contact, ContactInstance, contactAssociations } from './contact';
 import { ContactType, ContactTypeInstance, contactTypeAssociations } from './contact_type';
 import { Category, CategoryInstance, categoryAssociations } from './category';
 import { Currency, CurrencyInstance, currencyAssociations } from './currency';
+import { Bank, BankInstance, bankAssociations } from './bank';
 import { Account, AccountInstance, accountAssociations } from './account';
-import { AccountByCurrency, AccountByCurrencyInstance, accountByCurrencyAssociations } from './account_by_currency';
 import { Transaction, TransactionInstance, transactionAssociations } from './transaction';
 import { TrxStatus, TrxStatusInstance, trxStatusAssociations } from './trx_status';
 import { TrxType, TrxTypeInstance, trxTypeAssociations } from './trx_type';
@@ -18,8 +18,8 @@ const associations: (() => void)[] = [
     contactTypeAssociations,
     categoryAssociations,
     currencyAssociations,
+    bankAssociations,
     accountAssociations,
-    accountByCurrencyAssociations,
     trxStatusAssociations,
     trxTypeAssociations,
     transactionAssociations,
@@ -34,8 +34,8 @@ export {
     ContactType, ContactTypeInstance,
     Category, CategoryInstance,
     Currency, CurrencyInstance,
+    Bank, BankInstance,
     Account, AccountInstance,
-    AccountByCurrency, AccountByCurrencyInstance,
     Transaction, TransactionInstance,
     TrxStatus, TrxStatusInstance,
     TrxType, TrxTypeInstance,

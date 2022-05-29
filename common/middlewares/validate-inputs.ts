@@ -10,14 +10,28 @@ export const validateInputs = (req: Request, res: Response, next: NextFunction):
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        const { msg } = (errors.array({ onlyFirstError: true }))[0];
-
         try {
+
+            const { msg } = (errors.array({ onlyFirstError: true }))[0];
+            console.log({errorsArr: errors.array({ onlyFirstError: true })});
+
+            // If error is from check() -> msg = appStatusCode
+            // if error is from check().custom() -> msg = Message from error
+            const isValidStatusCode = !Number.isNaN(Number(msg));
+            console.log({isValidStatusCode})
+
+            const appStatusCode = isValidStatusCode
+                        ? Number(msg)
+                        : commonErrorsCodes.ERROR_IN_MIDDLEWARE
+            const message = isValidStatusCode
+                        ? ''
+                        : msg;
+
             const responseData = CommonResponseBuilder(
-                builtHttpCode(commonErrorsCodes.ERROR_IN_MIDDLEWARE),
-                commonErrorsCodes.ERROR_IN_MIDDLEWARE,
+                builtHttpCode(appStatusCode),
+                appStatusCode,
                 errors.array(),
-                msg,
+                message
             );
             responseHandler(res, responseData);
         }

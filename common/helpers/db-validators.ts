@@ -30,3 +30,12 @@ export const modelExistByIdAndUid = async(id = '', { req }: any): Promise<void> 
         throw new Error(`The ${modelName} with id '${id}' and uid ${uid} doesn't exist`);
     }
 }
+
+// Validate if exist a model with Id
+export const modelExistById = async(id = '', { req }: any): Promise<void> => {
+    const { model, modelName = 'model' } = req.model;
+    const modelExist = await model.findOne({ where: { id }});
+    if (!modelExist) {
+        throw new Error(`The ${modelName} with id '${id}' doesn't exist`);
+    }
+}

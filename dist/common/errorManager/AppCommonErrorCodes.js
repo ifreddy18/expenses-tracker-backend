@@ -49,6 +49,7 @@ const commonErrorsCodes = {
     PAGE_NOT_VALID_DATA_TYPE: nextErrorNumber('PAGE_NOT_VALID_DATA_TYPE'),
     LIMIT_NOT_VALID_DATA_TYPE: nextErrorNumber('LIMIT_NOT_VALID_DATA_TYPE'),
     NAME_IS_REQUIRED: nextErrorNumber('NAME_IS_REQUIRED', 'The name is required'),
+    ATTRIBUTE_IS_REQUIRED: nextErrorNumber('ATTRIBUTE_IS_REQUIRED'),
 };
 exports.commonErrorsCodes = commonErrorsCodes;
 errorMapNames.set(WITHOUT_ERRORS, WITHOUT_ERRORS_NAME);

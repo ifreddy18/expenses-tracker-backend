@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import db from '../connections';
-import { AccountByCurrency } from './account_by_currency';
+import { Account } from './account';
 import { CurrencyType } from './currency_type';
 
 export interface CurrencyInstance extends Model {
@@ -41,6 +41,6 @@ export const Currency = db.define<CurrencyInstance>('Currency', {
 });
 
 export const currencyAssociations = (): void => {
-    Currency.hasMany(AccountByCurrency, { foreignKey: 'currencyCode' });
+    Currency.hasMany(Account, { foreignKey: 'currencyCode' });
     Currency.belongsTo(CurrencyType, { foreignKey: 'currencyTypeId' });
 }

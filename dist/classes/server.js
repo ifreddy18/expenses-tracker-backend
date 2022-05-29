@@ -35,8 +35,8 @@ class Server {
                 // Test connection
                 yield db_1.default.authenticate();
                 console.log('Database online');
-                yield db_1.default.sync();
-                // await db.sync({ alter: true });
+                // await db.sync();
+                yield db_1.default.sync({ alter: true });
             }
             catch (error) {
                 throw new Error(error);

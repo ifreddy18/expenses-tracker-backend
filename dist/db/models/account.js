@@ -6,25 +6,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.accountAssociations = exports.Account = void 0;
 const sequelize_1 = require("sequelize");
 const connections_1 = __importDefault(require("../connections"));
-const account_by_currency_1 = require("./account_by_currency");
-const user_1 = require("./user");
+const bank_1 = require("./bank");
+const currency_1 = require("./currency");
+const transaction_1 = require("./transaction");
 exports.Account = connections_1.default.define('Account', {
     id: {
         primaryKey: true,
         type: sequelize_1.DataTypes.INTEGER,
         autoIncrement: true,
     },
-    uid: {
-        type: sequelize_1.DataTypes.UUID,
-        allowNull: false,
-    },
     name: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    url: {
+    bankId: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+        field: 'bank_id',
+    },
+    currencyCode: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
+        field: 'currency_code',
     },
     status: {
         allowNull: false,
@@ -32,11 +35,12 @@ exports.Account = connections_1.default.define('Account', {
         defaultValue: 1
     },
 }, {
-    tableName: 'accounts'
+    tableName: 'accounts',
 });
 const accountAssociations = () => {
-    exports.Account.belongsTo(user_1.User, { foreignKey: 'uid' });
-    exports.Account.hasMany(account_by_currency_1.AccountByCurrency, { foreignKey: 'accountId' });
+    exports.Account.belongsTo(currency_1.Currency, { foreignKey: 'currencyCode' });
+    exports.Account.belongsTo(bank_1.Bank, { foreignKey: 'bankId' });
+    exports.Account.hasMany(transaction_1.Transaction, { foreignKey: 'accountId' });
 };
 exports.accountAssociations = accountAssociations;
 //# sourceMappingURL=account.js.map
